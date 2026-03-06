@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Leo! 🎉</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;family=Dancing+Script:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    .app-wrapper {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 25%, #fbc2eb 50%, #a6c1ee 75%, #c2e9fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #fff 0%, transparent 70%);
+      border-radius: 50%;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    
+    .title-text {
+      font-family: 'Dancing Script', cursive;
+      background: linear-gradient(90deg, #ff6b9d, #c084fc, #60a5fa, #ff6b9d);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+    
+    .countdown-pulse {
+      animation: countdownPulse 1s ease-in-out;
+    }
+    
+    @keyframes countdownPulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .btn-glow {
+      animation: btnGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes btnGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 157, 0.4); }
+      50% { box-shadow: 0 0 35px rgba(255, 107, 157, 0.7); }
+    }
+    
+    .envelope-container {
+      perspective: 1000px;
+    }
+    
+    .envelope {
+      position: relative;
+      width: 280px;
+      height: 180px;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .envelope-body {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(145deg, #fff5f5 0%, #ffe4e6 100%);
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(145deg, #fecdd3 0%, #fda4af 100%);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      transform-origin: top center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10;
+    }
+    
+    .envelope.open .envelope-flap {
+      transform: rotateX(180deg);
+    }
+    
+    .heart-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      z-index: 20;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+    
+    .heart-seal:hover {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+    
+    .envelope.open .heart-seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+    }
+    
+    .letter {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      border-radius: 4px;
+      padding: 20px;
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .envelope.open .letter {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-120%);
+    }
+    
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+    }
+    
+    .page-hidden-up {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    
+    .page-hidden-down {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    
+    .letter-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease;
+      z-index: 100;
+    }
+    
+    .letter-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .letter-content {
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+      width: 90%;
+      max-width: 500px;
+      max-height: 80%;
+      border-radius: 12px;
+      padding: 24px;
+      overflow-y: auto;
+      transform: translateY(50px) scale(0.9);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+      border: 3px solid #fbbf24;
+    }
+    
+    .letter-modal.show .letter-content {
+      transform: translateY(0) scale(1);
+    }
+    
+    .letter-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .letter-content::-webkit-scrollbar-track {
+      background: #fef3c7;
+      border-radius: 3px;
+    }
+    
+    .letter-content::-webkit-scrollbar-thumb {
+      background: #f59e0b;
+      border-radius: 3px;
+    }
+    
+    .photo-placeholder {
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 16px 0;
+      border: 2px dashed #a5b4fc;
+      color: #6366f1;
+      font-weight: 600;
+    }
+    
+    .confetti {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .back-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 150;
+    }
+    
+    .back-btn.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .letter-back-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 50;
+    }
+    
+    .letter-back-btn.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .balloon {
+      position: absolute;
+      font-size: 2rem;
+      animation: balloonFloat 4s ease-in-out infinite;
+    }
+    
+    @keyframes balloonFloat {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper gradient-bg" id="app">
+   <!-- Sparkles Background -->
+   <div id="sparkles" class="fixed inset-0 pointer-events-none overflow-hidden"></div><!-- Page 1: Main Welcome -->
+   <div id="page1" class="page">
+    <!-- Balloons -->
+    <div class="balloon" style="top: 10%; left: 10%; animation-delay: 0s;">
+     🎈
+    </div>
+    <div class="balloon" style="top: 15%; right: 15%; animation-delay: 0.5s;">
+     🎈
+    </div>
+    <div class="balloon" style="top: 20%; left: 20%; animation-delay: 1s;">
+     🎁
+    </div>
+    <div class="balloon" style="top: 12%; right: 25%; animation-delay: 1.5s;">
+     ✨
+    </div>
+    <div class="text-center px-6">
+     <h1 id="mainTitle" class="title-text text-5xl md:text-7xl font-bold mb-4 floating">Happy Birthday, Leo! 🎉</h1>
+     <p id="subtitle" class="text-xl md:text-2xl text-pink-600 font-medium mb-8 opacity-90">Wish you all the best! &lt;3</p><!-- Countdown -->
+     <div id="countdown-container" class="mb-8">
+      <div id="countdown" class="text-4xl font-bold text-purple-500 countdown-pulse">
+       5
+      </div>
+      <p class="text-sm text-gray-500 mt-2">Get ready...</p>
+     </div><!-- Tap for More Button (Hidden Initially) --> <button id="tapMoreBtn" class="hidden px-6 py-3 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white font-semibold rounded-full btn-glow transform hover:scale-105 transition-all duration-300 shadow-lg"> Tap for More ✨ </button>
+    </div>
+   </div><!-- Page 2: Envelope -->
+   <div id="page2" class="page page-hidden-down">
+    <div class="envelope-container">
+     <div id="envelope" class="envelope floating">
+      <div class="envelope-body"></div>
+      <div class="envelope-flap"></div>
+      <div id="heartSeal" class="heart-seal">
+       🩷
+      </div>
+      <div class="letter">
+       <p class="text-xs text-amber-700 text-center">💌</p>
+      </div>
+     </div>
+    </div>
+    <p id="tapGuide" class="mt-8 text-pink-500 font-medium animate-pulse">Tap 🩷 to Open</p>
+   </div><!-- Letter Modal -->
+   <div id="letterModal" class="letter-modal">
+    <div class="letter-content" id="letterContent">
+     <div class="text-center mb-4">
+      <span class="text-3xl">💌</span>
+     </div>
+     <div class="text-amber-900 leading-relaxed text-sm md:text-base">
+      <p class="font-semibold text-lg mb-4 text-amber-800">Dear Leo,</p>
+      <p class="mb-4">Memang sampai saat ini kita ga saling tau nama asli kita masing-masing, bahkan aku panggil kamu Leo yang tidak lain adalah nama panggilan buatanku sendiri yang modal diakalin aja.</p>
+      <p class="mb-4">Tapi, dalam waktu sesingkat ini, kita selalu bisa saling menguatkan, saling jadi tempat berbagi cerita, bahkan sampai deeptalk di map Lonely, hehehe!</p>
+      <p class="mb-4">Aku cuma mau bilang. <strong>Selamat ulang tahun, ya :)</strong></p>
+      <p class="mb-4">Mungkin kamu ngerasa gaada yang spesial dari hari ulang tahun. Tapi aku harap, seiring bertambahnya umur kamu, kamu tumbuh jadi anak yang kuat, yang ceria, dan selalu peduli sama orang-orang di sekitar kamu.</p>
+      <p class="mb-4">Kamu mungkin emang pemalu, gampang kabur kalo lagi nervous, but I found you cute, hehehe! Lucu banget bisa liat kamu gelagapan gitu.</p><!-- Photo 1 -->
+      <img src="images/foto1.jpg" style="width:100%; border-radius:8px; margin:16px 0;">
+      <p class="text-center text-xs text-amber-600 italic mb-4">Kamu ingat foto ini? Aku ambil waktu kita lagi mabar di map Aetheria XD<br>
+        Kamu agak gugup di sini, tapi wajar sih, soalnya tiba-tiba banget karakter kita senempel itu 🫢</p><!-- Photo 2 -->
+      <img src="images/foto2.jpg" style="width:100%; border-radius:8px; margin:16px 0;">
+      <p class="text-center text-xs text-amber-600 italic mb-4">Ini juga! Ini favoritku. Aku seneng banget waktu itu kamu hibur aku pas aku lagi sedih 🥹<br>
+        Aku yang tadinya nangis langsung senyum-senyum liat kamu bikin T-Shirt dengan ava aku, se-effort itu kamu bikin aku ga sedih lagi :D</p>
+      <p class="mb-4">Kamu itu bener-bener definisi <strong>cowok gentle</strong>, pertahankan personality-mu yang itu ya, itu mahal lho!</p>
+      <p class="mb-4">Yah, aku minta maaf karena aku ga bisa kasih sesuatu yang besar dan berharga di hari ulang tahunmu. Padahal, kamu udah ngasih segala macam buat aku, mulai dari hiburan, waktu kamu, bahkan kamu sampe ngasih aku Robux 🥹</p>
+      <p class="mb-4">Aku harap dengan website sederhana yang aku bikin ini ... bisa bikin kamu seneng, setidaknya ... sedikit :D</p>
+      <p class="mb-4">Anyways, aku berdoa supaya setiap doamu, setiap harapanmu, setiap mimpimu, bisa terkabulkan oleh Allah bahkan lebih dari yang kamu bayangkan. <strong>Wish you all the best, Leo!</strong> Teruslah bersinar ✨</p>
+      <p class="text-xl font-bold text-center my-6 text-orange-600">MENYALA KING !!! 🔥</p>
+      <p class="text-right font-semibold text-pink-600 text-lg mt-6">Lunne 💕</p><!-- Back Button Inside Letter -->
+      <div id="letterBackBtn" class="letter-back-btn text-center mt-8 pt-4 border-t border-amber-300"><button onclick="goBackFromLetter()" class="flex flex-col items-center mx-auto text-amber-700 hover:scale-110 transition-transform"> <span class="text-2xl mb-2">↩️</span> <span class="text-xs font-medium bg-amber-100 px-3 py-1 rounded-full">Tap to Go Back</span> </button>
+      </div>
+     </div><!-- Scroll indicator -->
+     <div id="scrollIndicator" class="text-center mt-4 text-amber-500 text-sm animate-bounce">
+      ↓ Scroll untuk baca lebih lanjut ↓
+     </div>
+    </div>
+   </div><!-- Back Button -->
+   <div id="backBtn" class="back-btn">
+    <button onclick="goBack()" class="flex flex-col items-center text-white hover:scale-110 transition-transform"> <span class="text-3xl mb-1">↩️</span> <span class="text-xs font-medium bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Tap to Go Back</span> </button>
+   </div>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      main_title: "Happy Birthday, Leo! 🎉",
+      subtitle: "Wish you all the best! <3",
+      primary_color: "#ec4899",
+      secondary_color: "#a855f7",
+      background_color: "#ffecd2",
+      text_color: "#78350f",
+      accent_color: "#f59e0b"
+    };
+
+    let config = { ...defaultConfig };
+    let countdownInterval;
+    let currentPage = 1;
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          updateUI();
+        },
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (value) => {
+                cfg.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => cfg.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                cfg.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => cfg.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                cfg.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (value) => {
+                cfg.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => cfg.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                cfg.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => cfg.font_family || 'Quicksand',
+            set: (value) => {
+              cfg.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ["main_title", cfg.main_title || defaultConfig.main_title],
+          ["subtitle", cfg.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    }
+
+    function updateUI() {
+      document.getElementById('mainTitle').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('subtitle').innerHTML = (config.subtitle || defaultConfig.subtitle).replace('<3', '&lt;3');
+    }
+
+    // Create sparkles
+    function createSparkles() {
+      const container = document.getElementById('sparkles');
+      for (let i = 0; i < 20; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(sparkle);
+      }
+    }
+
+    // Countdown function
+    function startCountdown() {
+      let count = 5;
+      const countdownEl = document.getElementById('countdown');
+      
+      countdownInterval = setInterval(() => {
+        count--;
+        if (count >= 0) {
+          countdownEl.textContent = count;
+          countdownEl.classList.remove('countdown-pulse');
+          void countdownEl.offsetWidth; // Trigger reflow
+          countdownEl.classList.add('countdown-pulse');
+        }
+        
+        if (count === 0) {
+          clearInterval(countdownInterval);
+          setTimeout(() => {
+            document.getElementById('countdown-container').classList.add('hidden');
+            document.getElementById('tapMoreBtn').classList.remove('hidden');
+            document.getElementById('tapMoreBtn').classList.add('animate-bounce');
+            createConfetti();
+          }, 500);
+        }
+      }, 1000);
+    }
+
+    // Create confetti
+    function createConfetti() {
+      const colors = ['#ff6b9d', '#c084fc', '#60a5fa', '#fbbf24', '#34d399'];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.top = '-20px';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          document.body.appendChild(confetti);
+          
+          let posY = -20;
+          let posX = parseFloat(confetti.style.left);
+          let rotation = 0;
+          const speedY = 2 + Math.random() * 3;
+          const speedX = (Math.random() - 0.5) * 2;
+          const rotationSpeed = (Math.random() - 0.5) * 10;
+          
+          const fall = setInterval(() => {
+            posY += speedY;
+            posX += speedX;
+            rotation += rotationSpeed;
+            confetti.style.top = posY + 'px';
+            confetti.style.left = posX + '%';
+            confetti.style.transform = `rotate(${rotation}deg)`;
+            
+            if (posY > window.innerHeight) {
+              confetti.remove();
+              clearInterval(fall);
+            }
+          }, 16);
+        }, i * 50);
+      }
+    }
+
+    // Navigate to envelope page
+    function goToEnvelope() {
+      document.getElementById('page1').classList.add('page-hidden-up');
+      document.getElementById('page2').classList.remove('page-hidden-down');
+      currentPage = 2;
+    }
+
+    // Open envelope
+    function openEnvelope() {
+      const envelope = document.getElementById('envelope');
+      envelope.classList.add('open');
+      document.getElementById('tapGuide').style.opacity = '0';
+      
+      setTimeout(() => {
+        document.getElementById('letterModal').classList.add('show');
+        document.getElementById('backBtn').classList.add('show');
+      }, 800);
+    }
+
+    // Go back to main page
+    function goBack() {
+      goBackFromLetter();
+    }
+
+    // Check scroll position for letter content
+    function checkScroll() {
+      const content = document.getElementById('letterContent');
+      const indicator = document.getElementById('scrollIndicator');
+      const backBtn = document.getElementById('letterBackBtn');
+      
+      if (content.scrollTop + content.clientHeight >= content.scrollHeight - 50) {
+        indicator.style.opacity = '0';
+        backBtn.classList.add('show');
+      } else {
+        indicator.style.opacity = '1';
+        backBtn.classList.remove('show');
+      }
+    }
+
+    // Go back from letter
+    function goBackFromLetter() {
+      document.getElementById('letterModal').classList.remove('show');
+      document.getElementById('backBtn').classList.remove('show');
+      
+      setTimeout(() => {
+        document.getElementById('envelope').classList.remove('open');
+        document.getElementById('tapGuide').style.opacity = '1';
+        
+        setTimeout(() => {
+          document.getElementById('page2').classList.add('page-hidden-down');
+          document.getElementById('page1').classList.remove('page-hidden-up');
+          currentPage = 1;
+          
+          // Reset for replay
+          document.getElementById('countdown-container').classList.remove('hidden');
+          document.getElementById('tapMoreBtn').classList.add('hidden');
+          document.getElementById('countdown').textContent = '5';
+          startCountdown();
+        }, 300);
+      }, 500);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      createSparkles();
+      startCountdown();
+      updateUI();
+      
+      // Event listeners
+      document.getElementById('tapMoreBtn').addEventListener('click', goToEnvelope);
+      document.getElementById('heartSeal').addEventListener('click', openEnvelope);
+      document.getElementById('letterContent').addEventListener('scroll', checkScroll);
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d81b1b5c38eb5d0',t:'MTc3MjgwMzYwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
